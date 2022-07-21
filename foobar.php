@@ -13,8 +13,10 @@ for ($i=0; $i<=100; $i++){
     }else if ($i%5 == 0){
         echo " bar";
     }else{
-        echo " $i ";
+        echo " $i";
     }
+    //Don't want list to end with a comma
+    //only print out if not the last number
     if ($i < 100) echo ",";
 }
 ?>
