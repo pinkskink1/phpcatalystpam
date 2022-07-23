@@ -14,11 +14,42 @@ $message = <<<MES
     -u - the MySQL user
     -p - the MySQL password
     -h - the MySQL host
+    -s - the MySQL database name
     --help - prints out this manual
 
 MES;
 echo $message;
 }
+/*
+* Get rid of extraneous characters and set Camel Case
+*/
+function clean_name($n){
+
+    $n = preg_replace('/[^A-Za-z0-9\-\']/', '', $n); // Removes special chars.
+    $n = ucfirst(strtolower($n));
+    // if e.g. O'hare, make H capital
+    $pos = strpos($n, "'");
+    if($pos){
+        $str1 = substr($n,$pos+1);
+        $str1 = ucfirst($str1);
+        $n = substr_replace($n,$str1,$pos+1);
+    }
+    return $n;
+}
+/*
+* Validate email and return good email or error
+*/
+function validate_email($email){
+    $regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
+    $email = strtolower($email);
+    if (preg_match($regex, $email)) {
+        return $email;
+     } else {
+        return false;
+     }
+
+}
+
 /*
 *CREATE DATABASE TABLE
 */
@@ -137,6 +168,27 @@ foreach ($otherrslt as $option => $value) {
 
 //Open the file and add to database line by line ( rather than having a big array in memory)
 
+    $row = 0;
+
+    // read the data
+    $handle = fopen($filename, 'r');
+    if ($handle == 0)
+        exit("No file by that name exists!");
+
+    while (($data = fgetcsv($handle, 0, "\t")) !== FALSE) {
+        $row++;
+        $num = count($data);
+        if (strlen($data[0]) != 0) {
+
+            echo clean_name($data[0])." ".clean_name($data[1])."\n";
+            if(validate_email($data[2]))
+                    echo $data[2]."\n";
+
+        }
+    }
+
+
+    fclose($handle);
 
 ?>
 
