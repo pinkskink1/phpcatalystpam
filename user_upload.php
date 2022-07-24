@@ -154,8 +154,6 @@ foreach ($otherrslt as $option => $value) {
 //Drop and Create the Database Table (if not dry run)
 
 If (!$dryrun){
-
-	//make sure the dbparameters are filled before connection
 	
 	
 		$conn = drop_create_table(($user,$password,$host,$sid);
@@ -208,7 +206,9 @@ If (!$dryrun){
 				‘:email’ =>  $email;
 			]);
 		}
-	}
+		
+		}// end if data
+	}//end while loop
   
     //Close Database Connection
 	$conn = null;
